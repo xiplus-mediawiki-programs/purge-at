@@ -44,7 +44,11 @@ while True:
         break
 
 for row in categorymembers:
-    purge_at = datetime.datetime.strptime(row['sortkeyprefix'], '%Y%m%d%H%M%S')
+    try:
+        purge_at = datetime.datetime.strptime(row['sortkeyprefix'], '%Y%m%d%H%M%S')
+    except ValueError:
+        print('Invalid timestamp {} in {}'.format(row['sortkeyprefix'], row['title']))
+        continue
     page = pywikibot.Page(site, row['title'])
     if now >= purge_at:
         print('Purge {} {}'.format(page.title(), purge_at))
